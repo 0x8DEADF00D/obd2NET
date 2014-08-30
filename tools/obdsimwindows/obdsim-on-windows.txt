@@ -1,0 +1,35 @@
+OBDSim on Windows
+
+
+To run OBDSim on Windows successfully, you need to configure a virtual serial
+port. OBDSim opens one end of the virtual serial port, and you open the other
+end using your OBDII tool of choice.
+
+
+This author uses the open-source, free, tool called "com0com", available at
+http://com0com.sourceforge.net
+
+Be sure to download com0com from their download page, not hub0hub or any other
+package. There is an excellent ReadMe.txt file in the download for com0com -
+please read it.
+
+You may find you need to run the installer with Administrator privileges, or
+disable UAC temporarily, on some versions of windows.
+On Vista/7, you may need to enable "test signing" to allow the driver to load.
+To do that, open the windows command-prompt and run the following command and
+then reboot:
+bcdedit.exe -set TESTSIGNING ON
+
+
+Once installed, com0com will create two serial ports: CNCA0 and CNCB0. By
+default, OBDSim will attempt to connect to CNCA0. I suggest that if you need a
+port labelled COM{1-8} for your OBDII software, open com0com's setup tool, and
+rename CNCB0 to COM7 [or similar], but leave CNCA0 the same.
+
+Double click on obdsim.exe to launch it. If you wish to run it with additional
+flags [eg, choose a different data generator], then launch it from the
+command-line. Running "obdsim.exe --help" will show a list of available
+options.
+
+Gary "ChunkyKs" Briggs
+<chunky@icculus.org>
