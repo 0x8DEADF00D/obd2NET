@@ -25,7 +25,7 @@ Obtaining available DTCs (Diagnostic Trouble Codes)
     
 The given code will query all network trouble codes and print its text representation to the screen.
     
-These are not all possibilities of the library, refer to the `Vehicle` class to get all implemented functions that query data. Please note that I only have tested these functions in my Audi A3 and can therefore not guarantee, that they will work for you.
+These are not all possibilities of the library, refer to the `Vehicle` class to get all implemented functions that query data. Please note that I only have tested these functions in my Audi A3 (2007) and can therefore not guarantee, that they will work for you.
 
 
 Compatibility
