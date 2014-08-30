@@ -1,6 +1,6 @@
 Introduction
 ===
-obd2NET is a .NET libarary for querying the vehicles OBD system. Real time data and diagnostic codes can be retrieved by performing simple serial requests. Basically, querying works just as simple: You cast the query mode (i.e. `0x01` for the current data) and specify a PID (parameter ID) such as `0x0D` for the vehicle speed to get your information back. See [OBD-II PIDs](http://en.wikipedia.org/wiki/OBD-II_PIDs) for available modes and PIDs.
+Most vehicles nowadays are equipped with board computers permanently controlling the state of internal vehicle components, performing tests and storing current vehicle data and failures. These board computers are accessable through the OBD port commonly located at the driving cab in the near of the clutch.  obd2NET is a .NET libarary for querying these OBD systems. Real time data and diagnostic codes can be retrieved by performing simple serial requests. Basically, querying works just as simple: You cast the query mode (i.e. `0x01` for the current data) and specify a PID (parameter ID) such as `0x0D` for the vehicle speed to get your information back. See [OBD-II PIDs](http://en.wikipedia.org/wiki/OBD-II_PIDs) for available modes and PIDs.
 
 However, when using this library, you don't need to worry on how to communicate with the vehicle, just plug in the OBD connector into your vehicle's OBD port and get the other end of the cable to communicate with your device (USB/serial interfaces).
 
