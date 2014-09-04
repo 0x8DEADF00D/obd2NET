@@ -64,18 +64,29 @@ namespace obd2NET
         /// <remarks> Blocking until a complete answer has been received </remarks>
         public ControllerResponse Query(Vehicle.Mode parameterMode, Vehicle.PID parameterID)
         {
-            Port.Write(Convert.ToUInt32(parameterMode).ToString("X2") + Convert.ToUInt32(parameterID).ToString("X2") + "\r");
+            Send(Convert.ToUInt32(parameterMode).ToString("X2") + Convert.ToUInt32(parameterID).ToString("X2"));
             Thread.Sleep(100);
 
             string fullResponse = "";
             while(!fullResponse.Contains(">"))
             {
-                byte[] readBuffer = new byte[1024];
-                Port.Read(readBuffer, 0, 1024);
+                byte[] readBuffer = Read();
                 fullResponse = System.Text.Encoding.Default.GetString(readBuffer);
             }
 
             return new ControllerResponse(fullResponse, parameterMode, parameterID);
+        }
+
+        public void Send<T>(T message) 
+        {
+            Port.Write(message + "\r");
+        }
+
+        public byte[] Read()
+        {
+            byte[] readBuffer = new byte[1024];
+            Port.Read(readBuffer, 0, 1024);
+            return readBuffer;
         }
 
         /// <summary>
@@ -86,14 +97,13 @@ namespace obd2NET
         /// <remarks> Blocking until a complete answer has been received </remarks>
         public ControllerResponse Query(Vehicle.Mode parameterMode)
         {
-            Port.Write(Convert.ToUInt32(parameterMode).ToString("X2") + "\r");
+            Send(Convert.ToUInt32(parameterMode).ToString("X2"));
             Thread.Sleep(100);
 
             string fullResponse = "";
             while (!fullResponse.Contains(">"))
             {
-                byte[] readBuffer = new byte[1024];
-                Port.Read(readBuffer, 0, 1024);
+                byte[] readBuffer = Read();
                 fullResponse = System.Text.Encoding.Default.GetString(readBuffer);
             }
 

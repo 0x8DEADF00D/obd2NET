@@ -10,7 +10,7 @@ namespace obd2NET
     /// <summary>
     /// Vehicle that can be accessed through an <c>IOBDConnection</c>
     /// </summary>
-    public static class Vehicle
+    public class Vehicle
     {
         /// <summary>
         /// List of supported PIDs
@@ -42,13 +42,22 @@ namespace obd2NET
         }
 
         /// <summary>
+        /// Connection to the vehicle interface used to query the data 
+        /// </summary>
+        public IOBDConnection Connection { get; set; }
+
+        public Vehicle(IOBDConnection obdConnection)
+        {
+            Connection = obdConnection;
+        }
+
+        /// <summary>
         /// Queries the current vehicle speed
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> Speed given in km/h </returns>
-        public static uint Speed(IOBDConnection obdConnection)
+        public uint Speed()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.Speed);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.Speed);
             if (response.HasValidData()) throw new QueryException("Vehicle speed couldn't be queried, the controller returned no data");
 
             // the first value byte represents the speed in km/h
@@ -58,11 +67,10 @@ namespace obd2NET
         /// <summary>
         /// Queries the current engine temperature
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> Temperature given in celsius </returns>
-        public static int EngineTemperature(IOBDConnection obdConnection)
+        public int EngineTemperature()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.EngineTemperature);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.EngineTemperature);
             if (response.HasValidData()) throw new QueryException("Engine temperature couldn't be queried, the controller returned no data");
 
             // the first value byte minus 40 represents the engine temperature in celsius
@@ -72,11 +80,10 @@ namespace obd2NET
         /// <summary>
         /// Queries the current RPM
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> The retrieved RPM </returns>
-        public static uint RPM(IOBDConnection obdConnection)
+        public uint RPM()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.RPM);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.RPM);
             if (response.HasValidData()) throw new QueryException("RPM couldn't be queried, the controller returned no data");
 
             // RPM is given in 2 bytes
@@ -91,11 +98,10 @@ namespace obd2NET
         /// <summary>
         /// Queries the current throttle position
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> The retrieved throttle position in percentage (0-100) </returns>
-        public static uint ThrottlePosition(IOBDConnection obdConnection)
+        public uint ThrottlePosition()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.ThrottlePosition);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.ThrottlePosition);
             if (response.HasValidData()) throw new QueryException("Throttle position couldn't be queried, the controller returned no data");
 
             // given in percentage, first value byte *100/255
@@ -105,11 +111,10 @@ namespace obd2NET
         /// <summary>
         /// Queries the current calculated engine load value
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> The retrieved calculated engine load value in percentage (0-100) </returns>
-        public static uint CalculatedEngineLoadValue(IOBDConnection obdConnection)
+        public uint CalculatedEngineLoadValue()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.CalculatedEngineLoadValue);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.CalculatedEngineLoadValue);
             if (response.HasValidData()) throw new QueryException("Calculated engine load value couldn't be queried, the controller returned no data");
 
             // given in percentage, first value byte *100/255
@@ -119,11 +124,10 @@ namespace obd2NET
         /// <summary>
         /// Queries the current fuel pressure
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> The retrieved fuel pressure given in kPa </returns>
-        public static uint FuelPressure(IOBDConnection obdConnection)
+        public uint FuelPressure()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.FuelPressure);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.FuelPressure);
             if (response.HasValidData()) throw new QueryException("Fuel pressure couldn't be queried, the controller returned no data");
 
             // given in kPa, first value byte * 3
@@ -133,11 +137,10 @@ namespace obd2NET
         /// <summary>
         /// Queries the status of the malfunction indicator lamp (MIL)
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> true if the MIL is illuminated, false if not </returns>
-        public static bool MalfunctionIndicatorLamp(IOBDConnection obdConnection)
+        public bool MalfunctionIndicatorLamp()
         {
-            ControllerResponse response = obdConnection.Query(Mode.CurrentData, PID.MIL);
+            ControllerResponse response = Connection.Query(Mode.CurrentData, PID.MIL);
             if (response.HasValidData()) throw new QueryException("Malfunction indicator lamp couldn't be queried, the controller returned no data");
             if (response.Value.Length == 0) return false;
 
@@ -147,17 +150,16 @@ namespace obd2NET
         /// <summary>
         /// Queries the available diagnostic trouble codes (DTCs)
         /// </summary>
-        /// <param name="obdConnection"> Connection to the vehicle interface used to query the data </param>
         /// <returns> List containing all DTCs that could be retrieved </returns>
-        public static List<DiagnosticTroubleCode> DiagnosticTroubleCodes(IOBDConnection obdConnection)
+        public List<DiagnosticTroubleCode> DiagnosticTroubleCodes()
         {
             // issue the request for the actual DTCs
-            ControllerResponse response = obdConnection.Query(Mode.DiagnosticTroubleCodes);
+            ControllerResponse response = Connection.Query(Mode.DiagnosticTroubleCodes);
             if (response.HasValidData()) throw new QueryException("Diagnostic trouble codes couldn't be queried, the controller returned no data");
             if (response.Value.Length < 2) throw new QueryException("Diagnostic trouble codes couldn't be queried, received data was not complete");
 
             var fetchedCodes = new List<DiagnosticTroubleCode>();
-            for (int i = 1; i < response.Value.Length; i += 3) // each error code got a size of 3 bytes
+            for (int i = 0; i < response.Value.Length; i += 3) // each error code got a size of 3 bytes
             {
                 byte[] troubleCode = new byte[3];
                 Array.Copy(response.Value, i, troubleCode, 0, 3);
