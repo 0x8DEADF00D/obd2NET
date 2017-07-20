@@ -24,6 +24,15 @@ namespace obd2NET
         {
             get
             {
+                //TODO: This is a temporary fix to fetch all DTC's.
+                if (RequestedMode == Vehicle.Mode.DiagnosticTroubleCodes) {
+                    return String.Join(string.Empty, Raw
+                            .Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+                            .Where(_ => _.Split(' ').Count(number => number.Length == 2) >= 2)
+                            .Select(_ => _.Split(' ').Skip(1))
+                            .SelectMany(_ => _))
+                        .ToByteArray();
+                }
                 if(RequestedPID != Vehicle.PID.Unknown && RequestedMode != Vehicle.Mode.Unknown)
                 {
                     Match matchedPattern = Regex.Match(Raw, @"\n([0-9a-fA-F ]{5})([0-9a-fA-F ]+)\r\n>");
