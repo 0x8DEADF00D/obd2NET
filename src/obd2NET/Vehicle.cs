@@ -157,10 +157,10 @@ namespace obd2NET
             if (response.Value.Length < 2) throw new QueryException("Diagnostic trouble codes couldn't be queried, received data was not complete");
 
             var fetchedCodes = new List<DiagnosticTroubleCode>();
-            for (int i = 1; i < response.Value.Length; i += 3) // each error code got a size of 3 bytes
+            for (int i = 0; i < response.Value.Length; i += 2) // each error code got a size of 2 bytes
             {
-                byte[] troubleCode = new byte[3];
-                Array.Copy(response.Value, i, troubleCode, 0, 3);
+                byte[] troubleCode = new byte[2];
+                Array.Copy(response.Value, i, troubleCode, 0, 2);
 
                 if(!troubleCode.All(b => b == default(Byte))) // if the byte array is not entirely empty, add the error code to the parsed list
                     fetchedCodes.Add(new DiagnosticTroubleCode(troubleCode));
