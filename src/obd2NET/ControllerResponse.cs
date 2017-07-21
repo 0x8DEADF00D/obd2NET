@@ -24,21 +24,12 @@ namespace obd2NET
         {
             get
             {
-                if(RequestedPID != Vehicle.PID.Unknown && RequestedMode != Vehicle.Mode.Unknown)
-                {
-                    Match matchedPattern = Regex.Match(Raw, @"\n([0-9a-fA-F ]{5})([0-9a-fA-F ]+)\r\n>");
-                    return (matchedPattern.Groups.Count > 2) ? matchedPattern.Groups[2].Value.Replace(" ", "").ToByteArray() : Raw.ToByteArray();
-                }
-                else if (RequestedPID == Vehicle.PID.Unknown)
-                {
-                    Match matchedPattern = Regex.Match(Raw, @"\n([0-9a-fA-F]{2})([0-9a-fA-F ]+)\r\n>");
-                    return (matchedPattern.Groups.Count > 2) ? matchedPattern.Groups[2].Value.Replace(" ", "").ToByteArray() : Raw.ToByteArray();
-                }
-                else
-                {
-                    Match matchedPattern = Regex.Match(Raw, @"\n([0-9a-fA-F ]+)\r\n>");
-                    return (matchedPattern.Groups.Count > 1) ? matchedPattern.Groups[1].Value.Replace(" ", "").ToByteArray() : Raw.ToByteArray();
-                }
+                return String.Join(string.Empty, Raw
+                        .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Where(_ => _.Split(' ').Count(number => number.Length == 2) >= 2)
+                        .Select(_ => _.Split(' ').Skip(1))
+                        .SelectMany(_ => _))
+                    .ToByteArray();
             }
         }
 
