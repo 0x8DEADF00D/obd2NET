@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obd2NET", "obd2NET\obd2NET.csproj", "{388801C6-5CC7-43AE-B82F-C13FE2DBC131}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obd2NET", "Obd2NET\Obd2NET.csproj", "{4C873365-DFFC-4166-9BB2-2AC43E036BFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{388801C6-5CC7-43AE-B82F-C13FE2DBC131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{388801C6-5CC7-43AE-B82F-C13FE2DBC131}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{388801C6-5CC7-43AE-B82F-C13FE2DBC131}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{388801C6-5CC7-43AE-B82F-C13FE2DBC131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C873365-DFFC-4166-9BB2-2AC43E036BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C873365-DFFC-4166-9BB2-2AC43E036BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C873365-DFFC-4166-9BB2-2AC43E036BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C873365-DFFC-4166-9BB2-2AC43E036BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7CBB526-91B8-46AF-BFCE-6C372C5E60CC}
 	EndGlobalSection
 EndGlobal

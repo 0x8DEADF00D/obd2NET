@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace obd2NET
+namespace Obd2NET
 {
     /// <summary>
     /// Represents a Diagnostic trouble code which is used for reporting errors within the vehicle. 
@@ -27,7 +24,7 @@ namespace obd2NET
         /// <summary>
         /// Raw and complete trouble code
         /// </summary>
-        public Byte[] Code { get; set; }
+        public byte[] Code { get; set; }
 
         /// <summary>
         /// Human readable text representation
@@ -38,24 +35,24 @@ namespace obd2NET
         {
             get
             {
-                string representation = "";
-                switch(ErrorLocation)
+                var sb = new StringBuilder();
+                switch (ErrorLocation)
                 {
-                    case Location.Powertrain: { representation = "P"; break; }
-                    case Location.Chassis: { representation = "C"; break; }
-                    case Location.Body: { representation = "B"; break; }
-                    case Location.Network: { representation = "U"; break; }
+                    case Location.Powertrain: { sb.Append("P"); break; }
+                    case Location.Chassis: { sb.Append("C"); break; }
+                    case Location.Body: { sb.Append("B"); break; }
+                    case Location.Network: { sb.Append("U"); break; }
                 }
 
-                Byte firstByte = Code.First();
-                representation += (firstByte >> 4) & 3;
-                representation += Convert.ToInt32(((firstByte >> 0) & 15).ToString(), 16);
+                byte firstByte = Code.First();
+                sb.Append((firstByte >> 4) & 3);
+                sb.Append(Convert.ToInt32(((firstByte >> 0) & 15).ToString(), 16));
 
-                Byte secondByte = Code.ElementAt(1);
-                representation += Convert.ToInt32(((secondByte >> 4) & 15).ToString(), 16);
-                representation += Convert.ToInt32(((secondByte >> 0) & 15).ToString(), 16); 
+                byte secondByte = Code.ElementAt(1);
+                sb.Append(Convert.ToInt32(((secondByte >> 4) & 15).ToString(), 16));
+                sb.Append(Convert.ToInt32(((secondByte >> 0) & 15).ToString(), 16));
 
-                return representation;
+                return sb.ToString();
             }
         }
 
@@ -66,17 +63,16 @@ namespace obd2NET
         {
             get
             {
-                Byte firstByte = Code.First();
-                return (Location) ((firstByte >> 6) & 3);
+                return (Location)((Code.First() >> 6) & 3);
             }
         }
 
         public DiagnosticTroubleCode(string code)
         {
-            Code = System.Text.Encoding.Default.GetBytes(code);
+            Code = Encoding.Default.GetBytes(code);
         }
 
-        public DiagnosticTroubleCode(Byte[] code)
+        public DiagnosticTroubleCode(byte[] code)
         {
             Code = code;
         }
