@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace obd2NET
+namespace Obd2NET
 {
     /// <summary>
     /// Represents the response received from the controller unit.
@@ -24,7 +20,7 @@ namespace obd2NET
         {
             get
             {
-                if(RequestedPID != Vehicle.PID.Unknown && RequestedMode != Vehicle.Mode.Unknown)
+                if (RequestedPID != Vehicle.PID.Unknown && RequestedMode != Vehicle.Mode.Unknown)
                 {
                     Match matchedPattern = Regex.Match(Raw, @"\n([0-9a-fA-F ]{5})([0-9a-fA-F ]+)\r\n>");
                     return (matchedPattern.Groups.Count > 2) ? matchedPattern.Groups[2].Value.Replace(" ", "").ToByteArray() : Raw.ToByteArray();
